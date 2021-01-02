@@ -5,7 +5,7 @@ let baseUrl;
 class AccessApi {
     constructor(apiName) {
 
-       this.determineWhichConnectionStringToUse(apiName);
+        this.determineWhichConnectionStringToUse(apiName);
     }
 
     determineWhichConnectionStringToUse(apiName) {
@@ -13,11 +13,19 @@ class AccessApi {
             return apiString.name === apiName
         });
 
-        baseUrl = window.location.href.includes("localhost")
-            ? result.development
-            : window.location.href.includes("test.sartainstudios.com")
+
+        console.log(document.location.ancestorOrigins[0])
+
+        if (document.location.ancestorOrigins[0] != null && document.location.ancestorOrigins[0])
+            baseUrl = document.location.ancestorOrigins[0].includes("test.sartainstudios.com")
                 ? result.test
                 : result.production
+        else
+            baseUrl = window.location.href.includes("localhost")
+                ? result.development
+                : window.location.href.includes("test.sartainstudios.com")
+                    ? result.test
+                    : result.production
     }
 
     getData(urlExtension, data) {
