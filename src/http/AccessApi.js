@@ -13,21 +13,31 @@ class AccessApi {
             return apiString.name === apiName
         });
 
-        console.log("User Authentication run location: "+ this.getRunningLocation());
+        let parentLocation = this.getParentLocation();
 
-        baseUrl = this.getRunningLocation().includes("localhost")
-            ? result.development
-            : window.location.href.includes("test.sartainstudios.com")
-                ? result.test
-                : result.production;
+        if (this.isRunningAsIframe()
+            && (parentLocation.includes('test.sartainstudios.com') || parentLocation.includes('localhost')))
+            baseUrl = result.test
+        else if (this.isRunningAsIframe())
+            baseUrl = result.production
+        else
+            baseUrl = this.getSelfLocation().includes("localhost")
+                ? result.development
+                : window.location.href.includes("test.sartainstudios.com")
+                    ? result.test
+                    : result.production;
     }
 
     isRunningAsIframe() {
         return document.location.ancestorOrigins[0] !== null && document.location.ancestorOrigins[0] !== undefined
     }
 
-    getRunningLocation() {
-        return this.isRunningAsIframe() ? document.location.ancestorOrigins[0] : window.location.href
+    getParentLocation() {
+        return document.location.ancestorOrigins[0]
+    }
+
+    getSelfLocation() {
+        return window.location.href
     }
 
     getData(urlExtension, data) {
