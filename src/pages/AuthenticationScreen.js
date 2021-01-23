@@ -114,8 +114,7 @@ class AuthenticationScreen extends Component {
                 this.checkForMessages(result);
 
                 this.checkResultsForCredentialsErrors(result);
-            }
-            if (result.token.length > 100) {
+            } else if (result.token.length > 100) {
                 console.log("No errors detected, proceeding to login")
 
                 let dataToSend = {token: result};
@@ -175,7 +174,7 @@ class AuthenticationScreen extends Component {
     }
 
     checkResultsForCredentialsErrors(result) {
-        if (result.errors !== undefined || result.errors !== null) {
+        if (result.errors !== undefined && result.errors !== null) {
             console.log("Errors exist")
 
             if (result.errors.Username !== undefined && result.errors.Username !== null) {
